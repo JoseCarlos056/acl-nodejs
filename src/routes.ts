@@ -8,7 +8,7 @@ import { is } from './middlewares/permission';
 const router =  Router();
 
 router.post('/users', UserController.create)
-router.post('/session', SessionController.create)
+router.post('/sessions', SessionController.create)
 router.post('/permissions', PermissionController.create)
 router.post('/roles', RoleController.create)
 router.get('/testing', is(['ROLE_ADMIN','ROLE_USER']), (request, response)=>{
