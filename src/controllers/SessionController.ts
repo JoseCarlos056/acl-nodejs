@@ -10,7 +10,7 @@ class SessionController {
 
           const userRepository = getCustomRepository(UserRepository);
 
-          const user = await userRepository.findOne({ username});
+          const user = await userRepository.findOne({ username},{relations: ['roles']});
 
           if(!user) {
             return response.status(400).json({error: 'User not found!'})

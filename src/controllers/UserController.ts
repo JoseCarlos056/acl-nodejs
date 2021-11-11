@@ -3,6 +3,7 @@ import { getCustomRepository } from 'typeorm';
 import { UserRepository } from '../repositories/UserRepository';
 import { hash } from 'bcryptjs';
 import { RoleRepository } from '../repositories/RoleRepository';
+import { decode } from 'jsonwebtoken';
 
 class UserController{
     
@@ -29,7 +30,30 @@ class UserController{
       delete user.password
   
       return response.status(201).json(user);
-    }
+    };
+
+    async roles(request: Request, response: Response){
+      const authHeader = request.headers.authorization || "";
+      const userRepository = await getCustomRepository(UserRepository);
+    
+      const [, token] = authHeader?.split(" ");
+      try {
+        
+        const payload = decode(token);
+  
+        if(!payload){
+          return response.status(401).json({message: 'Not authorized!'})
+        }
+        const user = await userRepository.findOne(payload?.sub as string, { relations: ['roles']});
+  
+        const roles = user?.roles.map((r) => r.name);
+        return response.json(roles);
+      } catch (error) {
+        
+        return response.status(400).json({error: "Unexpected error"})
+      }
+    };
+
 
 }
 

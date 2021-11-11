@@ -8,6 +8,7 @@ import { is } from './middlewares/permission';
 const router =  Router();
 
 router.post('/users', UserController.create)
+router.get('/users/roles', UserController.roles)
 router.post('/sessions', SessionController.create)
 router.post('/permissions', PermissionController.create)
 router.post('/roles', RoleController.create)
